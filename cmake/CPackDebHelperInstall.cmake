@@ -44,19 +44,40 @@ foreach(file ${CPACK_DEBHELPER_INPUT_EXTRA})
   file(COPY ${file} DESTINATION ${CPACK_OUTPUT_FILE_PREFIX}/debian)
 endforeach()
 
-# Run the debhelpers
-
+# Always run dh_prep
 message("CPackDebHelper: Running dh_prep")
 execute_process(
   COMMAND fakeroot dh_prep ${dh_verbose}
   WORKING_DIRECTORY ${CPACK_OUTPUT_FILE_PREFIX})
 
+# Run the debhelpers in CPACK_DEBHELPER_RUN
 foreach(debhelper ${CPACK_DEBHELPER_RUN})
   message("CPackDebHelper: Running ${debhelper}")
   execute_process(
     COMMAND fakeroot ${debhelper} ${dh_verbose}
     WORKING_DIRECTORY ${CPACK_OUTPUT_FILE_PREFIX})
 endforeach()
+
+if(CPACK_DEBHELPER_MAKESHLIBS)
+  message("CPackDebHelper: Running dh_makeshlibs")
+  execute_process(
+    COMMAND fakeroot dh_makeshlibs -P${CPACK_OUTPUT_FILE_PREFIX} ${dh_verbose}
+    WORKING_DIRECTORY ${CPACK_OUTPUT_FILE_PREFIX})
+endif()
+
+if(CPACK_DEBHELPER_SHLIBDEPS)
+  message("CPackDebHelper: Running dh_shlibdeps")
+  execute_process(
+    COMMAND fakeroot dh_shlibdeps -P${CPACK_OUTPUT_FILE_PREFIX} -X${CPACK_OUTPUT_FILE_PREFIX}/CMakeFiles ${dh_verbose}
+    WORKING_DIRECTORY ${CPACK_OUTPUT_FILE_PREFIX})
+endif()
+
+if(CPACK_DEBHELPER_GENCONTROL)
+  message("CPackDebHelper: Running dh_gencontrol")
+  execute_process(
+    COMMAND fakeroot dh_gencontrol ${dh_verbose}
+    WORKING_DIRECTORY ${CPACK_OUTPUT_FILE_PREFIX})
+endif()
 
 message("CPackDebHelper: Running dh_installdeb")
 execute_process(

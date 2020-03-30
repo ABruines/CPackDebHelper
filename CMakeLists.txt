@@ -65,6 +65,10 @@ set(CPACK_PACKAGE_DIRECTORY ${CMAKE_BINARY_DIR})
 # Optional. The DEB package likes to know its target system architecture.
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE amd64)
 
+# Optional. This is used in the debian/control file.
+# (Multiple lines do not work here !?)
+set(CPACK_DEBIAN_PACKAGE_DESCRIPTION ${PROJECT_DESCRIPTION})
+
 # Optional. I just like this better than the CPack default
 set(CPACK_DEBIAN_FILE_NAME
   ${PROJECT_NAME}-${PROJECT_VERSION}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}.deb)
@@ -84,7 +88,13 @@ set(CPACK_DEBHELPER_INPUT_DIR "${CMAKE_SOURCE_DIR}/src/debian")
 # All of these must have the '.in' extention because they are first processed
 # by configure_file(). The package name must be lowercase here, if building a
 # single DEB package the package name may be omitted.
+#
+# !! You may want to add your own debian/control file here, I haven't been
+# able to produce a valid DEB package if CPack does it. See src/debian/control.in
+# for an example. !!
+#
 set(CPACK_DEBHELPER_INPUT
+  control.in
   ${CPACK_DEBIAN_PACKAGE_NAME}.changelog.in
   ${CPACK_DEBIAN_PACKAGE_NAME}.cron.d.in
   ${CPACK_DEBIAN_PACKAGE_NAME}.init.in
@@ -106,20 +116,32 @@ unset(CPACK_DEBHELPER_COMPAT)
 # Optional. List of debhelpers to run.
 # If left unset the default list of debhelpers is executed.
 #
+# Do not use the following debhelpers in this list:
+#    dh_prep, dh_makeshlibs, dh_shlibdeps, dh_gencontrol, dh_installdeb
+#
 # The default list (in order of execution):
 #    dh_install dh_installdirs dh_installcron dh_installchangelogs
 #    dh_installdocs dh_installinfo dh_installinit dh_installman dh_installmenu
-#    dh_installmodules dh_installsystemd dh_installudev dh_makeshlibs
+#    dh_installmodules dh_installsystemd dh_installudev
 #    dh_usrlocal dh_dwz dh_compress dh_fixperms
 #
 # See their respective man pages on how to use each debhelper.
 #
-# Note: You must not list dh_prep or dh_installdeb here, they are always executed.
-#
-# Note: Running dh_shlibdeps has no effect here (use CPACK_DEBIAN_PACKAGE_SHLIBDEPS
-#       instead). The same goes for dh_strip (use CPACK_STRIP_FILES instead).
-#
 unset(CPACK_DEBHELPER_RUN)
+
+# Optional. Scan for shared libraries and generates a shlibs file.
+# If left unset then CPackDebHelper set this to OFF.
+set(CPACK_DEBHELPER_MAKESHLIBS OFF)
+
+# Optional. Generate shared library substvar dependencies.
+# If left unset then CPackDebHelper sets this to CPACK_DEBIAN_PACKAGE_SHLIBDEPS
+# or to ON if CPACK_DEBIAN_PACKAGE_SHLIBDEPS is not defined.
+set(CPACK_DEBHELPER_SHLIBDEPS ON)
+
+# Optional. Let the debhelpers generate the debian/control file (instead of CPack)
+# If left unset then the CPackDebHelper set this to ON because the CPack DEB
+# generator does not create a valid control file.
+set(CPACK_DEBHELPER_GENCONTROL ON)
 
 # Optional. Run the debhelpers in verbose mode? (BOOL)
 # The default value is empty (no)

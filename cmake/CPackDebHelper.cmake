@@ -38,7 +38,7 @@ if(NOT FAKEROOT)
 endif()
 find_program(DH_PREP dh_prep)
 if(NOT DH_PREP)
-  message("WARNING: dh_prep not found, please install debhelper")
+  message("WARNING: dh_prep not found, please install debhelper (>= 11)")
 endif()
 if(NOT FAKEROOT OR NOT DH_PREP)
   if(CPACK_DEBHELPER_FATALITY)
@@ -79,18 +79,39 @@ if(NOT CPACK_DEBHELPER_RUN)
   set(CPACK_DEBHELPER_RUN
     dh_install dh_installdirs dh_installcron dh_installchangelogs
     dh_installdocs dh_installinfo dh_installinit dh_installman dh_installmenu
-    dh_installmodules dh_installsystemd dh_installudev dh_makeshlibs
+    dh_installmodules dh_installsystemd dh_installudev
     dh_usrlocal dh_dwz dh_compress dh_fixperms)
+endif()
+
+# Set the default for dh_makeshlibs CPACK_DEBHELPER_MAKESHLIBS (OFF)
+if(NOT DEFINED CPACK_DEBHELPER_MAKESHLIBS)
+  set(CPACK_DEBHELPER_MAKESHLIBS OFF)
+endif()
+
+# Set the default for CPACK_DEBHELPER_SHLIBDEPS (ON)
+if(NOT CPACK_DEBHELPER_SHLIBDEPS)
+  if(NOT DEFINED CPACK_DEBIAN_PACKAGE_SHLIBDEPS)
+    set(CPACK_DEBHELPER_SHLIBDEPS ON)
+  else()
+    set(CPACK_DEBHELPER_SHLIBDEPS ${CPACK_DEBIAN_PACKAGE_SHLIBDEPS})
+  endif()
+endif()
+
+# Set the default for CPACK_DEBHELPER_GENCONTROL
+if(NOT CPACK_DEBHELPER_GENCONTROL)
+  set(CPACK_DEBHELPER_GENCONTROL ON)
 endif()
 
 # Generate required files (note the extra newline after 'Source:' !)
 message(STATUS "Generating debian/compat")
 file(WRITE ${CPACK_PACKAGE_DIRECTORY}/debian/compat ${CPACK_DEBHELPER_COMPAT})
-message(STATUS "Generating debian/control")
+# The control file may be overridden from CPACK_DEBHELPER_INPUT
 file(WRITE ${CPACK_PACKAGE_DIRECTORY}/debian/control "\
 Source: ${CPACK_DEBIAN_PACKAGE_NAME}\n
 Package: ${CPACK_DEBIAN_PACKAGE_NAME}
 Architecture: any
+Maintainer: ${CPACK_DEBIAN_PACKAGE_MAINTAINER}
+Description: ${CPACK_DEBIAN_PACKAGE_DESCRIPTION}
 ")
 
 # Generate the debhelper input from the .in files in CPACK_DEBHELPER_INPUT.
