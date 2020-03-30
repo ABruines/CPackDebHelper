@@ -85,11 +85,18 @@ set(CPACK_DEBHELPER_INPUT_DIR "${CMAKE_SOURCE_DIR}/src/debian")
 # by configure_file(). The package name must be lowercase here, if building a
 # single DEB package the package name may be omitted.
 set(CPACK_DEBHELPER_INPUT
-	${CPACK_DEBIAN_PACKAGE_NAME}.cron.d.in
-	${CPACK_DEBIAN_PACKAGE_NAME}.init.in
-	${CPACK_DEBIAN_PACKAGE_NAME}.postinst.in
-	${CPACK_DEBIAN_PACKAGE_NAME}.postrm.in
-	${CPACK_DEBIAN_PACKAGE_NAME}.service.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.changelog.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.cron.d.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.init.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.postinst.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.postrm.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.service.in
+  ${CPACK_DEBIAN_PACKAGE_NAME}.docs.in
+)
+
+# Optional. Extra files to copy into the debian directory before running debhelper
+set(CPACK_DEBHELPER_INPUT_EXTRA
+  ${CMAKE_SOURCE_DIR}/README.md
 )
 
 # Optional. Set the debhelper compatability level, if left unset CPackDebHelper
@@ -100,14 +107,10 @@ unset(CPACK_DEBHELPER_COMPAT)
 # If left unset the default list of debhelpers is executed.
 #
 # The default list (in order of execution):
-#   dh_bugfiles, dh_fixperms, dh_install, dh_installcatalogs, dh_installcron,
-#   dh_installdebconf, dh_installdirs, dh_installdocs, dh_installemacsen,
-#   dh_installexamples, dh_installgsettings, dh_installifupdown, dh_installinfo,
-#   dh_installinit, dh_installinitramfs, dh_installlogcheck, dh_installlogrotate,
-#   dh_installman, dh_installmenu, dh_installmime, dh_installmodules, dh_installpam,
-#   dh_installppp, dh_installsystemd, dh_installsystemduser, dh_installudev,
-#   dh_installwm, dh_link, dh_lintian, dh_makeshlibs, dh_ucf, dh_usrlocal, dh_dwz,
-#   dh_compress
+#    dh_install dh_installdirs dh_installcron dh_installchangelogs
+#    dh_installdocs dh_installinfo dh_installinit dh_installman dh_installmenu
+#    dh_installmodules dh_installsystemd dh_installudev dh_makeshlibs
+#    dh_usrlocal dh_dwz dh_compress dh_fixperms
 #
 # See their respective man pages on how to use each debhelper.
 #

@@ -1,0 +1,5 @@
+cpackdebhelper (1.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #0100)
+
+ -- Someone Out There <@CPACK_DEBIAN_PACKAGE_MAINTAINER@>  Mon, 30 Mar 2020 23:58:00 +0200

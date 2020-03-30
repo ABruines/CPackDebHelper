@@ -38,6 +38,12 @@ if(CPACK_DEBHELPER_VERBOSE)
   set(dh_verbose "-v")
 endif()
 
+# Copy extra files
+
+foreach(file ${CPACK_DEBHELPER_INPUT_EXTRA})
+  file(COPY ${file} DESTINATION ${CPACK_OUTPUT_FILE_PREFIX}/debian)
+endforeach()
+
 # Run the debhelpers
 
 message("CPackDebHelper: Running dh_prep")

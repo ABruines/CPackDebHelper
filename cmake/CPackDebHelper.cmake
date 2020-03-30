@@ -77,14 +77,10 @@ endif()
 # Set a default list of debhelpers to run if CPACK_DEBHELPER_RUN is empty.
 if(NOT CPACK_DEBHELPER_RUN)
   set(CPACK_DEBHELPER_RUN
-    dh_bugfiles dh_fixperms dh_install dh_installcatalogs dh_installcron
-    dh_installdebconf dh_installdirs dh_installdocs dh_installemacsen
-    dh_installexamples dh_installgsettings dh_installifupdown dh_installinfo
-    dh_installinit dh_installinitramfs dh_installlogcheck dh_installlogrotate
-    dh_installman dh_installmenu dh_installmime dh_installmodules dh_installpam
-    dh_installppp dh_installsystemd dh_installsystemduser dh_installudev
-    dh_installwm dh_link dh_lintian dh_makeshlibs dh_ucf dh_usrlocal dh_dwz
-    dh_compress)
+    dh_install dh_installdirs dh_installcron dh_installchangelogs
+    dh_installdocs dh_installinfo dh_installinit dh_installman dh_installmenu
+    dh_installmodules dh_installsystemd dh_installudev dh_makeshlibs
+    dh_usrlocal dh_dwz dh_compress dh_fixperms)
 endif()
 
 # Generate required files (note the extra newline after 'Source:' !)
