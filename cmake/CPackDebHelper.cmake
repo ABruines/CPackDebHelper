@@ -107,10 +107,12 @@ message(STATUS "Generating debian/compat")
 file(WRITE ${CPACK_PACKAGE_DIRECTORY}/debian/compat ${CPACK_DEBHELPER_COMPAT})
 # The control file may be overridden from CPACK_DEBHELPER_INPUT
 file(WRITE ${CPACK_PACKAGE_DIRECTORY}/debian/control "\
+Maintainer: ${CPACK_DEBIAN_PACKAGE_MAINTAINER}
 Source: ${CPACK_DEBIAN_PACKAGE_NAME}\n
 Package: ${CPACK_DEBIAN_PACKAGE_NAME}
 Architecture: any
-Maintainer: ${CPACK_DEBIAN_PACKAGE_MAINTAINER}
+Depends: \${shlibs:Depends}, \${misc:Depends}
+Pre-Depends: \${misc:Pre-Depends}
 Description: ${CPACK_DEBIAN_PACKAGE_DESCRIPTION}
 ")
 
